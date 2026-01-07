@@ -1,10 +1,12 @@
 package hello.springmvc.basic.request;
 
+import hello.springmvc.basic.HelloData;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -86,6 +88,29 @@ public class RequestParamController {
     @RequestMapping("/request-param-multi-value-map")
     public String requestParamMultiValueMap(@RequestParam MultiValueMap<String, String> paramMap) {
         log.info("username={}, age={}", paramMap.get("username"), paramMap.get("age"));
+        return "ok";
+    }
+
+    /**
+     * spring mvc @ModelAttribute process
+     * 1. new HelloData()
+     * 2. find query parameter name in HelloData property
+     * [property] if instance has getXX and setXX, has XX property.
+     * 3. bind parameter value to property by setter. ex) setUsername
+     */
+    @ResponseBody
+    @RequestMapping("/model-attribute-v1")
+    public String modelAttributeV1(@ModelAttribute HelloData helloData) {
+        log.info("helloData={}", helloData);
+        return "ok";
+    }
+
+    // simple type(String, int, Integer) -> @RequestParam
+    // other type -> @ModelAttribute(except argument resolver type)
+    @ResponseBody
+    @RequestMapping("/model-attribute-v2")
+    public String modelAttributeV2(HelloData helloData) {
+        log.info("helloData={}", helloData);
         return "ok";
     }
 }
